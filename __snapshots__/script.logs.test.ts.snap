@@ -1,0 +1,36 @@
+export const snapshot = {};
+
+snapshot[`logs: commit-and-push in test mode with --add 1`] = `
+"> git add -f dist
+git add -f dist
+> git add -f 'index.html'
+git add -f index.html
+> git commit -m 'chore: release v1.0.0' || true
+git commit -m chore: release v1.0.0
+latest commit on branch git rev-parse --abbrev-ref HEAD: git rev-parse HEAD
+Running in test mode, skipping command: git push"
+`;
+
+snapshot[`logs: commit-and-push NOT in test mode calls git push 1`] = `
+"> git add -f dist
+git add -f dist
+> git commit -m 'chore: release v1.0.0' || true
+git commit -m chore: release v1.0.0
+latest commit on branch git rev-parse --abbrev-ref HEAD: git rev-parse HEAD
+> git push
+git push"
+`;
+
+snapshot[`logs: commit-and-push with --release-branch shows release branch in hash line 1`] = `
+"> git commit -m 'chore: release v1.0.0' || true
+git commit -m chore: release v1.0.0
+latest commit on branch git rev-parse --abbrev-ref HEAD: git rev-parse HEAD
+Running in test mode, skipping command: git push"
+`;
+
+snapshot[`logs: commit-and-push without --release-branch shows gitCurrentBranch in hash line 1`] = `
+"> git commit -m 'chore: release v2.0.0' || true
+git commit -m chore: release v2.0.0
+latest commit on branch git rev-parse --abbrev-ref HEAD: git rev-parse HEAD
+Running in test mode, skipping command: git push"
+`;
