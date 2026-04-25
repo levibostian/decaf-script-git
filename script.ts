@@ -59,6 +59,10 @@ export const mergeIntoReleaseBranch = async (options: MergeIntoReleaseBranchOpti
 
   await $`git checkout ${releaseBranch}`.printCommand();
   await $`git merge ${mergeOptions} ${currentBranch}`.printCommand();
+
+  const commitHash = await $`git rev-parse HEAD`.text();
+  const branchName = await $`git rev-parse --abbrev-ref HEAD`.text();
+  console.log(`latest commit on branch ${branchName}: ${commitHash}`);
 };
 
 export const commitAndPush = async (options: CommitAndPushOptions, input: DeployStepInput): Promise<void> => {

@@ -13,6 +13,36 @@ function makeInput(extra: Partial<DeployStepInput> = {}): DeployStepInput {
 }
 
 // ---------------------------------------------------------------------------
+// merge-into-release-branch log snapshots
+// ---------------------------------------------------------------------------
+
+Deno.test("logs: merge-into-release-branch checks out and merges", async (t) => {
+  const gitCleanup = await mockBin("git", "bash", 'echo "git $*"; exit 0');
+  try {
+    const { stdout } = await runDeployScript(
+      "deno run --allow-all script.ts merge-into-release-branch --release-branch latest",
+      makeInput({ gitCurrentBranch: "main" }),
+    );
+    await assertSnapshot(t, stdout.join("\n"));
+  } finally {
+    gitCleanup();
+  }
+});
+
+Deno.test("logs: merge-into-release-branch with --merge-options", async (t) => {
+  const gitCleanup = await mockBin("git", "bash", 'echo "git $*"; exit 0');
+  try {
+    const { stdout } = await runDeployScript(
+      `deno run --allow-all script.ts merge-into-release-branch --release-branch latest '--merge-options=--ff --no-edit'`,
+      makeInput({ gitCurrentBranch: "main" }),
+    );
+    await assertSnapshot(t, stdout.join("\n"));
+  } finally {
+    gitCleanup();
+  }
+});
+
+// ---------------------------------------------------------------------------
 // commit-and-push log snapshots
 // ---------------------------------------------------------------------------
 
