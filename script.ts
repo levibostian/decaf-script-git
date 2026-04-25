@@ -59,6 +59,10 @@ export const mergeIntoReleaseBranch = async (options: MergeIntoReleaseBranchOpti
 
   await $`git checkout ${releaseBranch}`.printCommand();
   await $`git merge ${mergeOptions} ${currentBranch}`.printCommand();
+
+  const commitHash = await $`git rev-parse HEAD`.text();
+  const branchName = await $`git rev-parse --abbrev-ref HEAD`.text();
+  console.log(`latest commit on branch ${branchName}: ${commitHash}`);
 };
 
 export const commitAndPush = async (options: CommitAndPushOptions, input: DeployStepInput): Promise<void> => {
@@ -74,6 +78,11 @@ export const commitAndPush = async (options: CommitAndPushOptions, input: Deploy
   // the '|| true' is to prevent this command from erroring out if there are no changes to commit.
   // this can happen if git add doesn't actually add any files. if you're re-running a failed decaf deploy, this is likely. 
   await $`git commit -m ${commitMsg} || true`.printCommand();
+
+  // show the commit hash in the logs. it's helpful for users to see this for their own debugging if they need to look up the commit later. 
+  const commitHash = await $`git rev-parse HEAD`.text();
+  const branchName = await $`git rev-parse --abbrev-ref HEAD`.text();
+  console.log(`latest commit on branch ${branchName}: ${commitHash}`);
 
   if (input.testMode) {
     console.log("Running in test mode, skipping command: git push");
