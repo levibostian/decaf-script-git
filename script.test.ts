@@ -280,3 +280,17 @@ Deno.test("renderStringTemplate leaves unknown variables as empty string", async
   const result = await renderStringTemplate("hello {{ unknown }}", {});
   assertEquals(result, "hello ");
 });
+
+Deno.test("renderStringTemplate throws a descriptive error on invalid template syntax", async () => {
+  let threw = false;
+  try {
+    await renderStringTemplate("{{ if }}", {});
+  } catch (e) {
+    threw = true;
+    assertEquals(
+      (e as Error).message,
+      "Failed to render the string template. The template given is:\n{{ if }}\n\nThere is likely a syntax error in the template.\nOriginal error: SyntaxError: Unexpected token 'if'",
+    );
+  }
+  assertEquals(threw, true);
+});
