@@ -57,6 +57,13 @@ export const mergeIntoReleaseBranch = async (options: MergeIntoReleaseBranchOpti
     ? [...mergeOptionsString.trim().split(/\s+/)]
     : [];
 
+  // Create local branch from remote if it doesn't exist locally.
+  // Necessary because CI performs a shallow clone and doesn't have all branches locally.
+  const doesBranchExist = (await $`git branch --list ${releaseBranch}`.text()).trim() !== "";
+  if (!doesBranchExist) {
+    await $`git branch --track ${releaseBranch} origin/${releaseBranch}`.printCommand();
+  }
+
   await $`git checkout ${releaseBranch}`.printCommand();
   await $`git merge ${mergeOptions} ${currentBranch}`.printCommand();
 
