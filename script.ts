@@ -134,6 +134,9 @@ Examples:
 // ---------------------------------------------------------------------------
 
 if (import.meta.main) {
+  // Change to the working directory specified by the decaf environment
+  Deno.chdir(Deno.env.get("DECAF_ROOT_WORKING_DIRECTORY")!);
+  
   const args = parseArgs(Deno.args, {
     string: ["release-branch", "commit-message", "merge-options"],
     collect: ["add"],
