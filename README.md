@@ -2,8 +2,6 @@
 
 A script specifically designed for the [decaf](https://github.com/levibostian/decaf) deployment automation tool. This script helps you perform Git operations as part of your continuous deployment workflows.
 
-**Important**: This is exclusively for use with decaf. You must use decaf to utilize this script — it's not a standalone tool for general use.
-
 ## What does this script do?
 
 This script provides two commands to automate a common release-branch deployment pattern:
@@ -11,9 +9,9 @@ This script provides two commands to automate a common release-branch deployment
 1. **Merge your working branch into a dedicated release branch** (where built/compiled artifacts live)
 2. **Stage, commit, and push** the compiled files on that release branch
 
-## Getting Started
+# Getting Started
 
-**No installation required!** We just need to tell decaf how to run this script (via `npx`, `deno`, or a compiled binary).
+Run using decaf's `shebang` command in your deployment workflow.
 
 **GitHub Actions Example**
 
@@ -21,29 +19,19 @@ This script provides two commands to automate a common release-branch deployment
 - uses: levibostian/decaf
   with:
     deploy: |
-      npx @levibostian/decaf-script-git merge-into-release-branch --release-branch latest
+      decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
       # ... run your build steps here ...
-      npx @levibostian/decaf-script-git commit-and-push --add dist
+      decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
     # Other decaf arguments...
 ```
 
-### Alternative Installation Methods
+Replace `<version-here>` with a [release](https://github.com/levibostian/decaf-script-git/releases). Latest: ![GitHub Release](https://img.shields.io/github/v/release/levibostian/decaf-script-git)
 
-1. **Run with Deno** (requires Deno installed)
+**Command Line Example**
 
-```yaml
-deploy: |
-  deno run --allow-all --quiet jsr:@levibostian/decaf-script-git merge-into-release-branch --release-branch latest
-  deno run --allow-all --quiet jsr:@levibostian/decaf-script-git commit-and-push --add dist
-```
-
-2. **Run as a compiled binary**
-
-```yaml
-deploy: |
-  curl -fsSL https://github.com/levibostian/decaf-script-git/blob/HEAD/install?raw=true | bash -s "0.1.0"
-  ./decaf-script-git merge-into-release-branch --release-branch latest
-  ./decaf-script-git commit-and-push --add dist
+```bash
+decaf \
+  --deploy "decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest && decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist"
 ```
 
 ### Set the git commit author 
@@ -78,13 +66,13 @@ Checks out the release branch and merges the current branch into it. Run this be
 
 ```bash
 # Basic usage
-npx @levibostian/decaf-script-git merge-into-release-branch --release-branch latest
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
 
 # With merge strategy flags
-npx @levibostian/decaf-script-git merge-into-release-branch --release-branch latest --merge-options="--ff --no-edit"
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest --merge-options="--ff --no-edit"
 
 # Using an alias
-npx @levibostian/decaf-script-git merge --release-branch stable
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge --release-branch stable
 ```
 
 ---
@@ -117,14 +105,14 @@ Any field from the decaf `DeployStepInput` object is available, plus `releaseBra
 
 ```bash
 # Stage dist/ and commit with default message
-npx @levibostian/decaf-script-git commit-and-push --add dist
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
 
 # Stage multiple paths
-npx @levibostian/decaf-script-git commit-and-push --add dist --add index.html
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --add index.html
 
 # Custom commit message
-npx @levibostian/decaf-script-git commit-and-push --add dist --commit-message "build: release {{ nextVersionName }}"
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --commit-message "build: release {{ nextVersionName }}"
 
 # Include release branch in commit message
-npx @levibostian/decaf-script-git commit-and-push --add dist --release-branch latest --commit-message "deploy {{ nextVersionName }} to {{ releaseBranch }}"
+decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --release-branch latest --commit-message "deploy {{ nextVersionName }} to {{ releaseBranch }}"
 ```

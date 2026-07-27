@@ -112,6 +112,30 @@ Deno.test("merge-into-release-branch with --merge-options passes them to git mer
   }
 });
 
+Deno.test("merge-into-release-branch creates tracking branch when release branch does not exist locally", async () => {
+  // Simulate CI shallow clone where origin/latest exists but local branch does not
+  const gitCleanup = await mockBin("git", "bash", `
+    if [[ "$1" == "branch" && "$2" == "--list" ]]; then
+      exit 0  # empty output = branch does not exist locally
+    fi
+    echo "git $*"; exit 0
+  `);
+  try {
+    const { code, stdout } = await runDeployScript(
+      "deno run --allow-all script.ts merge-into-release-branch --release-branch latest",
+      makeInput({ gitCurrentBranch: "main" }),
+    );
+
+    assertEquals(code, 0);
+    assertStringIncludes(stdoutText(stdout), "git branch --track latest origin/latest");
+    // Ensure both branch creation and checkout happen
+    assertStringIncludes(stdoutText(stdout), "git checkout latest");
+    assertStringIncludes(stdoutText(stdout), "git merge main");
+  } finally {
+    gitCleanup();
+  }
+});
+
 Deno.test("merge-into-release-branch without --merge-options runs git merge with no extra flags", async () => {
   const gitCleanup = await mockGit();
   try {
