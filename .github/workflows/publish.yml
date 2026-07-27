@@ -13,14 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: jdx/mise-action@v4
-
-      - uses: levibostian/decaf@0.16.0
+      - uses: levibostian/decaf@0.17.2
         env:
           # required to use 'gh' CLI in my step scripts. 
           GH_TOKEN: ${{ github.token }}      
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          get_latest_release_current_branch: decaf shebang git@github.com:levibostian/decaf-script-github-releases.git/shebang.sh@1.2.0 get
-          get_next_release_version: decaf shebang git@github.com:levibostian/decaf-script-conventional-commits.git/shebang.sh@0.3.0
-          deploy: decaf shebang git@github.com:levibostian/decaf-script-github-releases.git/shebang.sh@1.2.0 set
+          get_latest_release_current_branch: decaf shebang https://github.com/levibostian/decaf-script-github-releases.git/shebang.sh@1.3.0 get
+          get_next_release_version: decaf shebang https://github.com/levibostian/decaf-script-conventional-commits.git/shebang.sh@0.3.0
+          deploy: decaf shebang https://github.com/levibostian/decaf-script-github-releases.git/shebang.sh@1.3.0 set
