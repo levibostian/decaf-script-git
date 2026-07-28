@@ -19,9 +19,9 @@ Run using decaf's `shebang` command in your deployment workflow.
 - uses: levibostian/decaf
   with:
     deploy: |
-      decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
+      decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
       # ... run your build steps here ...
-      decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
+      decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
     # Other decaf arguments...
 ```
 
@@ -31,7 +31,7 @@ Replace `<version-here>` with a [release](https://github.com/levibostian/decaf-s
 
 ```bash
 decaf \
-  --deploy "decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest && decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist"
+  --deploy "decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest && decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist"
 ```
 
 ### Set the git commit author 
@@ -66,13 +66,13 @@ Checks out the release branch and merges the current branch into it. Run this be
 
 ```bash
 # Basic usage
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest
 
 # With merge strategy flags
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest --merge-options="--ff --no-edit"
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> merge-into-release-branch --release-branch latest --merge-options="--ff --no-edit"
 
 # Using an alias
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> merge --release-branch stable
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> merge --release-branch stable
 ```
 
 ---
@@ -105,14 +105,14 @@ Any field from the decaf `DeployStepInput` object is available, plus `releaseBra
 
 ```bash
 # Stage dist/ and commit with default message
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist
 
 # Stage multiple paths
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --add index.html
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --add index.html
 
 # Custom commit message
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --commit-message "build: release {{ nextVersionName }}"
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --commit-message "build: release {{ nextVersionName }}"
 
 # Include release branch in commit message
-decaf shebang git@github.com:levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --release-branch latest --commit-message "deploy {{ nextVersionName }} to {{ releaseBranch }}"
+decaf shebang https://github.com/levibostian/decaf-script-git.git/shebang.sh@<version-here> commit-and-push --add dist --release-branch latest --commit-message "deploy {{ nextVersionName }} to {{ releaseBranch }}"
 ```
