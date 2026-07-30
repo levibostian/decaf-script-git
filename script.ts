@@ -134,9 +134,6 @@ Examples:
 // ---------------------------------------------------------------------------
 
 if (import.meta.main) {
-  // Change to the working directory specified by the decaf environment
-  Deno.chdir(Deno.env.get("DECAF_ROOT_WORKING_DIRECTORY")!);
-  
   const args = parseArgs(Deno.args, {
     string: ["release-branch", "commit-message", "merge-options"],
     collect: ["add"],
@@ -172,6 +169,8 @@ if (import.meta.main) {
         Deno.exit(1);
       }
       const input = getDeployStepInput();
+      Deno.chdir(input.gitRootDirectory);
+
       await mergeIntoReleaseBranch({
         releaseBranch,
         currentBranch: input.gitCurrentBranch,
@@ -182,6 +181,8 @@ if (import.meta.main) {
     case "commit-and-push":
     case "commit": {
       const input = getDeployStepInput();
+      Deno.chdir(input.gitRootDirectory);
+
       await commitAndPush({
         addPaths: args["add"] as string[],
         commitMessage: args["commit-message"] as string,
